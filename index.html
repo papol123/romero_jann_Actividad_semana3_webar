@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,6 +10,9 @@
   <script type="module"
     src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js">
   </script>
+
+  <!-- librería para generar el código QR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
     :root {
@@ -586,13 +588,11 @@
         <h3>Escanea y explora el Evo</h3>
 
         <p>
-          Este QR debe apuntar a la URL pública de tu experiencia
-          después de publicarla en GitHub Pages.
+          Escanea este código para abrir la experiencia WebAR
+          directamente en tu celular.
         </p>
 
-        <div id="qrcode">
-          QR pendiente de URL pública
-        </div>
+        <div id="qrcode"></div>
 
       </div>
 
@@ -605,13 +605,14 @@
     Mitsubishi Evo · Experiencia WebAR
   </footer>
 
-
-  <!--
-    El QR definitivo se configurará después de publicar la página.
-    No se utiliza localhost porque el código QR final debe abrir
-    la URL HTTPS pública de GitHub Pages.
-  -->
+  <!-- genera el código QR apuntando a la URL pública de GitHub Pages -->
+  <script>
+    new QRCode(document.getElementById("qrcode"), {
+      text: "https://papol123.github.io/romero_jann_Actividad_semana3_webar/",
+      width: 180,
+      height: 180
+    });
+  </script>
 
 </body>
 </html>
-```
