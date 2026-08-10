@@ -1,0 +1,617 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mitsubishi Evo | Lancer Evolution</title>
+
+  <!-- model-viewer: visor 3D y realidad aumentada -->
+  <script type="module"
+    src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js">
+  </script>
+
+  <style>
+    :root {
+      --fondo: #070707;
+      --fondo-secundario: #111111;
+      --texto: #ffffff;
+      --texto-secundario: #b8b8b8;
+      --rojo: #e21b2d;
+      --rojo-hover: #ff3043;
+      --borde: #292929;
+      --verde-whatsapp: #25d366;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, #202020 0%, var(--fondo) 45%);
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 6%;
+      border-bottom: 1px solid var(--borde);
+      background: rgba(7, 7, 7, 0.92);
+      backdrop-filter: blur(8px);
+    }
+
+    .marca {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .marca span {
+      color: var(--rojo);
+    }
+
+    .etiqueta {
+      color: var(--texto-secundario);
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    main {
+      width: 100%;
+    }
+
+    .hero {
+      min-height: 88vh;
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      align-items: center;
+      gap: 35px;
+      padding: 55px 6%;
+      max-width: 1500px;
+      margin: auto;
+    }
+
+    .contenido {
+      padding: 20px 0;
+    }
+
+    .eyebrow {
+      color: var(--rojo);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 6vw, 6rem);
+      line-height: 0.95;
+      letter-spacing: -3px;
+      margin-bottom: 22px;
+    }
+
+    h1 span {
+      display: block;
+      color: #a8a8a8;
+      font-size: 0.42em;
+      letter-spacing: 1px;
+      margin-top: 18px;
+    }
+
+    .descripcion {
+      max-width: 650px;
+      color: var(--texto-secundario);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+
+    .precio {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+
+    .precio-anterior {
+      color: #777;
+      text-decoration: line-through;
+      font-size: 1.05rem;
+    }
+
+    .precio-actual {
+      color: var(--texto);
+      font-size: 2.3rem;
+      font-weight: 900;
+    }
+
+    .ahorro {
+      display: inline-block;
+      color: #fff;
+      background: var(--rojo);
+      padding: 7px 12px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      margin-bottom: 25px;
+    }
+
+    .datos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .dato {
+      border: 1px solid var(--borde);
+      background: rgba(255, 255, 255, 0.03);
+      padding: 12px 16px;
+      border-radius: 6px;
+      color: #ddd;
+      font-size: 0.9rem;
+    }
+
+    .dato strong {
+      color: white;
+    }
+
+    .acciones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .boton {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 50px;
+      padding: 0 22px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.9rem;
+      transition: 0.25s ease;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .boton-principal {
+      background: var(--rojo);
+      color: white;
+    }
+
+    .boton-principal:hover {
+      background: var(--rojo-hover);
+      transform: translateY(-2px);
+    }
+
+    .boton-secundario {
+      border-color: #444;
+      background: transparent;
+      color: white;
+    }
+
+    .boton-secundario:hover {
+      border-color: #777;
+      background: #181818;
+    }
+
+    .visor-contenedor {
+      position: relative;
+      min-height: 620px;
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at center, #292929 0%, #111 42%, #070707 78%);
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.55);
+    }
+
+    .visor-etiqueta {
+      position: absolute;
+      z-index: 3;
+      top: 20px;
+      left: 20px;
+      padding: 9px 13px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid #333;
+      border-radius: 5px;
+      color: #ccc;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 620px;
+      background: transparent;
+      --poster-color: transparent;
+    }
+
+    #ar-button {
+      position: absolute;
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+
+      border: none;
+      border-radius: 6px;
+      background: var(--rojo);
+      color: white;
+      padding: 15px 24px;
+
+      font-size: 0.95rem;
+      font-weight: 900;
+      cursor: pointer;
+
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+      transition: 0.25s ease;
+    }
+
+    #ar-button:hover {
+      background: var(--rojo-hover);
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    .seccion {
+      max-width: 1200px;
+      margin: auto;
+      padding: 80px 6%;
+    }
+
+    .seccion h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .seccion p {
+      color: var(--texto-secundario);
+      line-height: 1.8;
+      max-width: 900px;
+    }
+
+    .beneficios {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 35px;
+    }
+
+    .beneficio {
+      padding: 25px;
+      border: 1px solid var(--borde);
+      border-radius: 8px;
+      background: var(--fondo-secundario);
+    }
+
+    .beneficio h3 {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .beneficio p {
+      font-size: 0.9rem;
+    }
+
+    .contacto {
+      margin-top: 35px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .whatsapp {
+      background: var(--verde-whatsapp);
+      color: #061b0d;
+    }
+
+    .whatsapp:hover {
+      background: #42e27d;
+      transform: translateY(-2px);
+    }
+
+    .qr {
+      margin-top: 50px;
+      text-align: center;
+      padding: 35px;
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      background: #0d0d0d;
+    }
+
+    .qr h3 {
+      margin-bottom: 10px;
+    }
+
+    .qr p {
+      margin: 0 auto 20px;
+    }
+
+    #qrcode {
+      display: inline-flex;
+      padding: 12px;
+      background: white;
+      border-radius: 6px;
+      min-width: 180px;
+      min-height: 180px;
+      align-items: center;
+      justify-content: center;
+      color: #111;
+      font-size: 0.8rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--borde);
+      padding: 30px 6%;
+      text-align: center;
+      color: #666;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 35px;
+      }
+
+      .visor-contenedor,
+      model-viewer {
+        min-height: 500px;
+        height: 500px;
+      }
+
+      .beneficios {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 18px 5%;
+      }
+
+      .etiqueta {
+        display: none;
+      }
+
+      .hero {
+        padding: 35px 5%;
+      }
+
+      h1 {
+        letter-spacing: -2px;
+      }
+
+      .visor-contenedor,
+      model-viewer {
+        min-height: 430px;
+        height: 430px;
+      }
+
+      .acciones {
+        flex-direction: column;
+      }
+
+      .boton {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="marca">Mitsubishi <span>Evo</span></div>
+    <div class="etiqueta">Experiencia WebAR</div>
+  </header>
+
+  <main>
+
+    <section class="hero">
+
+      <div class="contenido">
+
+        <div class="eyebrow">Disponible ahora</div>
+
+        <h1>
+          Lancer Evolution
+          <span>Evolution X FQ-440 MR</span>
+        </h1>
+
+        <p class="descripcion">
+          Una experiencia pensada para amantes de los automóviles japoneses
+          y deportivos. Explora el Mitsubishi Lancer Evolution en 3D
+          y llévalo a tu espacio mediante realidad aumentada.
+        </p>
+
+        <div class="precio">
+          <span class="precio-anterior">$39.000.000 COP</span>
+          <span class="precio-actual">$33.000.000 COP</span>
+        </div>
+
+        <div class="ahorro">
+          AHORRA $6.000.000 COP
+        </div>
+
+        <div class="datos">
+          <div class="dato">
+            <strong>153.000 km</strong>
+          </div>
+
+          <div class="dato">
+            Automóvil deportivo
+          </div>
+
+          <div class="dato">
+            Mitsubishi Evo
+          </div>
+        </div>
+
+        <div class="acciones">
+
+          <a
+            class="boton boton-principal"
+            href="https://wa.me/573225362465?text=Hola%2C%20estoy%20interesado%20en%20el%20Mitsubishi%20Lancer%20Evolution"
+            target="_blank"
+            rel="noopener noreferrer">
+            Contáctanos para comprar
+          </a>
+
+          <a
+            class="boton boton-secundario"
+            href="https://wa.me/573225362465?text=Hola%2C%20quiero%20solicitar%20informaci%C3%B3n%20sobre%20el%20Mitsubishi%20Lancer%20Evolution"
+            target="_blank"
+            rel="noopener noreferrer">
+            Solicitar información
+          </a>
+
+          <a
+            class="boton boton-secundario"
+            href="https://wa.me/573225362465?text=Hola%2C%20quiero%20consultar%20la%20disponibilidad%20del%20Mitsubishi%20Lancer%20Evolution"
+            target="_blank"
+            rel="noopener noreferrer">
+            Ver disponibilidad
+          </a>
+
+        </div>
+
+      </div>
+
+      <div class="visor-contenedor">
+
+        <div class="visor-etiqueta">
+          Modelo 3D interactivo
+        </div>
+
+        <model-viewer
+          src="modelo.glb"
+          alt="Mitsubishi Lancer Evolution en 3D"
+          camera-controls
+          touch-action="pan-y"
+          shadow-intensity="1"
+          exposure="1"
+          ar
+          ar-modes="webxr scene-viewer quick-look"
+          interaction-prompt="auto"
+          loading="eager">
+
+          <button
+            slot="ar-button"
+            id="ar-button">
+            Ver en mi espacio
+          </button>
+
+        </model-viewer>
+
+      </div>
+
+    </section>
+
+
+    <section class="seccion">
+
+      <h2>Un ícono japonés</h2>
+
+      <p>
+        El Mitsubishi Lancer Evolution, conocido como Evolution o Evo,
+        es un automóvil deportivo compacto de cuatro puertas. La familia
+        Evolution se caracterizó por sus versiones de altas prestaciones,
+        con turbocompresor y tracción integral permanente, además de una
+        importante historia vinculada al mundo del rally.
+      </p>
+
+      <div class="beneficios">
+
+        <div class="beneficio">
+          <h3>Diseño deportivo</h3>
+          <p>
+            Una propuesta enfocada en quienes buscan la estética y el
+            carácter de los deportivos japoneses.
+          </p>
+        </div>
+
+        <div class="beneficio">
+          <h3>Experiencia 3D</h3>
+          <p>
+            Explora el vehículo desde diferentes ángulos directamente
+            desde la página.
+          </p>
+        </div>
+
+        <div class="beneficio">
+          <h3>Realidad aumentada</h3>
+          <p>
+            Usa el botón “Ver en mi espacio” desde un celular compatible
+            para visualizar el modelo en tu entorno.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="contacto">
+
+        <a
+          class="boton whatsapp"
+          href="https://wa.me/573225362465?text=Hola%2C%20estoy%20interesado%20en%20el%20Mitsubishi%20Lancer%20Evolution"
+          target="_blank"
+          rel="noopener noreferrer">
+          WhatsApp: 322 536 2465
+        </a>
+
+      </div>
+
+
+      <div class="qr">
+
+        <h3>Escanea y explora el Evo</h3>
+
+        <p>
+          Este QR debe apuntar a la URL pública de tu experiencia
+          después de publicarla en GitHub Pages.
+        </p>
+
+        <div id="qrcode">
+          QR pendiente de URL pública
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    Mitsubishi Evo · Experiencia WebAR
+  </footer>
+
+
+  <!--
+    El QR definitivo se configurará después de publicar la página.
+    No se utiliza localhost porque el código QR final debe abrir
+    la URL HTTPS pública de GitHub Pages.
+  -->
+
+</body>
+</html>
+```
